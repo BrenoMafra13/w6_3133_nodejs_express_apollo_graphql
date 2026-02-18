@@ -16,9 +16,8 @@ dotenv.config();
 //console.log(process.env);
 
 //mongoDB Atlas Connection String
-const DB_CONNECTION = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_PASSWORD}@cluster0.${process.env.CLUSTER_ID}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
-
-//TODO - Replace you Connection String here
+// index.js
+const DB_CONNECTION = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_ID}/?appName=Cluster0`;
 const connectDB = async() => {
     await mongoose.connect(DB_CONNECTION)
 }
@@ -42,11 +41,11 @@ async function startServer() {
     );
 
     //Start Express server
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, async () => {
       console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/graphql`);
       //Connect to MongoDB Atlas
       try {
-          connectDB()
+          await connectDB()
           console.log('Connected to MongoDB Atlas');
       } catch (error) {
         console.log(`Unable to connect to DB : ${error.message}`);
